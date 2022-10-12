@@ -1,81 +1,80 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firestore/app/modules/home/domain/model/pessoa_model.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _ageController = TextEditingController();
-
-  Future createName({
-    required String name,
-    required String email,
-    required int age,
-
-  }) async {
-    final sendPeopleFirebase = FirebaseFirestore.instance.collection('name').doc();
-
-    final people = PessoaModel(id: sendPeopleFirebase.id, name: name, email: email, age: age);
-    final json = people.toMap();
-
-    await sendPeopleFirebase.set(json);
-  }
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Page'),
-      ),
-      body: Column(
+    return Material(
+      child: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                labelText: 'Name',
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/people.jpg'),
+                fit: BoxFit.cover,
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: const Color.fromARGB(255, 61, 61, 61).withOpacity(0.7),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text(
+                  'Bem vindo ao CRUD',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                labelText: 'Email',
+                SizedBox(height: 20),
+                Text(
+                  'Adicione, edite, remova e veja as pessoas cadastradas, de forma rapida e facil!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 200),
+            alignment: Alignment.bottomCenter,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/get_people');
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30,
+                  vertical: 20,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'Ver pessoas',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 17, 17, 17),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              controller: _ageController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                labelText: 'Age',
-              ),
-            ),
-          ),
-          ElevatedButton(
-            child: const Text('Enviar'),
-            onPressed: () {
-              final name = _nameController.text;
-              final email = _emailController.text;
-              final age = _ageController.text;
-              final ageConvert = int.parse(age);
-              createName(name: name, email: email, age: ageConvert);
-            },
-          )
         ],
       ),
     );

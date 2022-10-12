@@ -2,12 +2,12 @@ import 'dart:convert';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-class PessoaModel {
+class PersonModel {
   final String id;
   final String name;
   final String email;
   final int age;
-  PessoaModel({
+  PersonModel({
     required this.id,
     required this.name,
     required this.email,
@@ -23,8 +23,8 @@ class PessoaModel {
     };
   }
 
-  factory PessoaModel.fromMap(Map<String, dynamic> map) {
-    return PessoaModel(
+  factory PersonModel.fromMap(Map<String, dynamic> map) {
+    return PersonModel(
       id: map['id'] as String,
       name: map['name'] as String,
       email: map['email'] as String,
@@ -34,7 +34,7 @@ class PessoaModel {
 
   String toJson() => json.encode(toMap());
 
-  factory PessoaModel.fromJson(String source) => PessoaModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory PersonModel.fromJson(String source) => PersonModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
