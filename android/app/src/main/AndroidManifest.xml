@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.job_timer">
+    package="com.example.flutter_firestore">
    <application
-        android:label="job_timer"
+        android:label="flutter_firestore"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

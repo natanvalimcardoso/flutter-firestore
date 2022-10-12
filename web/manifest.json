@@ -1,6 +1,6 @@
 {
-    "name": "job_timer",
-    "short_name": "job_timer",
+    "name": "flutter_firestore",
+    "short_name": "flutter_firestore",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
