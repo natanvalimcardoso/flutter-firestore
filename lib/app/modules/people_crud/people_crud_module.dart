@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
-import 'presentation/choose_the_card_page.dart';
+import 'presentation/people_list.dart';
 
 
 class PeopleCrudModule extends Module {
