@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firestore/app/modules/people_crud/create_person/domain/model/pessoa_model.dart';
+import 'package:flutter_firestore/app/modules/people_crud/domain/model/pessoa_model.dart';
 
 class CreatePersonPage extends StatelessWidget {
   CreatePersonPage({Key? key}) : super(key: key);

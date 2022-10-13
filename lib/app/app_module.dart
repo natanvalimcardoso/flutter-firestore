@@ -2,6 +2,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 import '../core/const/route_constants.dart';
 import 'modules/home/home_module.dart';
+import 'modules/people_crud/people_crud_module.dart';
 
 class AppModule extends Module {
   @override
@@ -15,6 +16,10 @@ class AppModule extends Module {
         ModuleRoute(
           RouteConstants.homeModule,
           module: HomeModule(),
+        ),
+        ModuleRoute(
+          RouteConstants.peopleCrudModule,
+          module: PeopleCrudModule(),
         ),
       ];
 }

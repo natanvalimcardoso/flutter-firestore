@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+
+import '../../../../../core/const/route_constants.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -53,7 +56,7 @@ class HomePage extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/get_people');
+                 Modular.to.pushNamed(RouteConstants.peopleCrudModule);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
