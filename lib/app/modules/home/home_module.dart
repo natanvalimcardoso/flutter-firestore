@@ -1,4 +1,4 @@
-import 'package:flutter_firestore/app/modules/home/presentation/pages/home_page.dart';
+import 'package:flutter_firestore/app/modules/home/view/pages/home_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 

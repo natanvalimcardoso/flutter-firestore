@@ -39,6 +39,7 @@ dependencies:
   flutter_modular: ^5.0.3
   cloud_firestore: ^3.5.1
   modal_bottom_sheet: ^2.1.2
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

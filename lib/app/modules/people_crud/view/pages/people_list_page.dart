@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firestore/app/modules/people_crud/presentation/widgets/header_widget.dart';
+import 'package:flutter_firestore/app/modules/people_crud/view/widgets/header_widget.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import '../../domain/model/pessoa_model.dart';
+import '../../controller/controller_pessoas.dart';
+import '../../model/pessoa_model.dart';
 import '../widgets/modal_container_widget.dart';
 
 class PeopleListPage extends StatefulWidget {
@@ -25,7 +26,7 @@ Future createName({required String name, required String email, required int age
   await sendPeopleFirebase.set(json);
 }
 
-
+final _controllerPessoas = ControllerPessoas();
 
 class _PeopleListPageState extends State<PeopleListPage> {
   @override
@@ -34,14 +35,42 @@ class _PeopleListPageState extends State<PeopleListPage> {
       body: Column(
         children: [
           const HeaderWidget(),
-          SizedBox(
-            height: 550,
-            child: ListView.builder(
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Container();
-              },
-            ),
+          StreamBuilder(
+            stream: _controllerPessoas.findAll(),
+            builder: (context, AsyncSnapshot<Stream<List<PersonModel>>> snapshot) {
+              if (snapshot.hasData) {
+                return StreamBuilder(
+                  stream: snapshot.data,
+                  builder: (context, AsyncSnapshot<List<PersonModel>> snapshot) {
+                    if (snapshot.hasData) {
+                      return SizedBox(
+                        height:400,
+                        
+                        child: ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            final people = snapshot.data![index];
+                            return ListTile(
+                              title: Text(people.name),
+                              subtitle: Text(people.email),
+                              trailing: Text(people.age.toString()),
+                            );
+                          },
+                        ),
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
           ),
         ],
       ),
@@ -55,7 +84,7 @@ class _PeopleListPageState extends State<PeopleListPage> {
                 padding: const EdgeInsets.only(
                   top: 50,
                 ),
-                child:  ModalContainerWidget(
+                child: ModalContainerWidget(
                   onTap: () {
                     createName(
                       name: _nameController.text,
