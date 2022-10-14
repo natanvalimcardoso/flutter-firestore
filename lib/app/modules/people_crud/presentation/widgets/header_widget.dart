@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+    
+class HeaderWidget extends StatelessWidget {
 
-class ChooseTheCardPage extends StatelessWidget {
-  const ChooseTheCardPage({Key? key}) : super(key: key);
-
+  const HeaderWidget({ Key? key }) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(
+    return  SizedBox(
             height: 100,
             width: double.infinity,
             child: Card(
@@ -34,22 +32,6 @@ class ChooseTheCardPage extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-          SizedBox(
-            height: 550,
-            child: ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, index) {
-            return Container();
-            },
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ),
-    );
+          );
   }
 }

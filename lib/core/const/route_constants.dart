@@ -2,7 +2,7 @@ class RouteConstants {
 
   //   //* --------------- Modulos -------------------- *//
   static const homeModule = '/homeModule/';
-  static const peopleCrudModule = '/homeModule';
+  static const peopleCrudModule = '/peopleCrudModule/';
 
   // static const pokedexModule = '/pokedexModule';
 

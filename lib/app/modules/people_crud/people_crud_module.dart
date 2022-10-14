@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
-import 'presentation/people_list.dart';
+import 'presentation/pages/people_list_page.dart';
 
 
 class PeopleCrudModule extends Module {
@@ -11,7 +11,7 @@ class PeopleCrudModule extends Module {
   List<ModularRoute> get routes => [
     ChildRoute(
       Modular.initialRoute,
-      child: (_, __) =>  const ChooseTheCardPage(),
+      child: (_, __) =>  const PeopleListPage(),
     )
   ];
 }
