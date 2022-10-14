@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firestore/app/modules/people_crud/presentation/widgets/header_widget.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../domain/model/pessoa_model.dart';
+import '../widgets/modal_container_widget.dart';
 
 class PeopleListPage extends StatefulWidget {
   const PeopleListPage({Key? key}) : super(key: key);
@@ -23,22 +25,24 @@ Future createName({required String name, required String email, required int age
   await sendPeopleFirebase.set(json);
 }
 
+
+
 class _PeopleListPageState extends State<PeopleListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          HeaderWidget(),
-          // SizedBox(
-          //   height: 550,
-          //   child: ListView.builder(
-          //     itemCount: 10,
-          //     itemBuilder: (context, index) {
-          //       return Container();
-          //     },
-          //   ),
-          // ),
+          const HeaderWidget(),
+          SizedBox(
+            height: 550,
+            child: ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return Container();
+              },
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -47,55 +51,23 @@ class _PeopleListPageState extends State<PeopleListPage> {
             context: context,
             builder: (context) => Container(
               height: 350,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        labelText: 'Name',
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        labelText: 'Email',
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: _ageController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        labelText: 'Age',
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    child: const Text('Enviar'),
-                    onPressed: () {
-                      createName(
-                        name: _nameController.text,
-                        email: _emailController.text,
-                        age: int.parse(_ageController.text),
-                      );
-                    },
-                  )
-                ],
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 50,
+                ),
+                child:  ModalContainerWidget(
+                  onTap: () {
+                    createName(
+                      name: _nameController.text,
+                      email: _emailController.text,
+                      age: int.parse(_ageController.text),
+                    );
+                    Modular.to.pop();
+                  },
+                  nameController: _nameController,
+                  emailController: _emailController,
+                  ageController: _ageController,
+                ),
               ),
             ),
           );
