@@ -65,7 +65,7 @@ class _PeopleListPageState extends State<PeopleListPage> {
                     child: CircularProgressIndicator(),
                   );
                 }
-
+                
                 return SizedBox(
                   height: 500,
                   child: ListView( //! transformar em ListView.builder

@@ -59,7 +59,13 @@ class ModalContainerWidget extends StatelessWidget {
           ),
           child: SizedBox(
             width: 200,
-            child: ElevatedButton(onPressed: onTap, child: const Text('Enviar')),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.black),
+              ),
+              onPressed: onTap,
+              child: const Text('Enviar'),
+            ),
           ),
         )
       ],
