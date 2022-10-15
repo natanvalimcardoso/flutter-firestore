@@ -26,7 +26,8 @@ Future createName({required String name, required String email, required int age
   await sendPeopleFirebase.set(json);
 }
 
-final _controllerPessoas = ControllerPessoas();
+    CollectionReference people = FirebaseFirestore.instance.collection('people');
+
 
 class _PeopleListPageState extends State<PeopleListPage> {
   @override
@@ -35,43 +36,31 @@ class _PeopleListPageState extends State<PeopleListPage> {
       body: Column(
         children: [
           const HeaderWidget(),
-          StreamBuilder(
-            stream: _controllerPessoas.findAll(),
-            builder: (context, AsyncSnapshot<Stream<List<PersonModel>>> snapshot) {
-              if (snapshot.hasData) {
-                return StreamBuilder(
-                  stream: snapshot.data,
-                  builder: (context, AsyncSnapshot<List<PersonModel>> snapshot) {
-                    if (snapshot.hasData) {
-                      return SizedBox(
-                        height:400,
-                        
-                        child: ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            final people = snapshot.data![index];
-                            return ListTile(
-                              title: Text(people.name),
-                              subtitle: Text(people.email),
-                              trailing: Text(people.age.toString()),
-                            );
-                          },
-                        ),
-                      );
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+          StreamBuilder<QuerySnapshot>(
+            stream: people.snapshots(),
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Text('Something went wrong');
               }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Text("Loading");
+              }
+
+              return SizedBox(
+                height: 500,
+                child: ListView(
+                  children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                    Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+                    return ListTile(
+                      title: Text(data['name']),
+                      subtitle: Text(data['email']),
+                    );
+                  }).toList(),
+                ),
+              );
             },
-          ),
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -106,3 +95,47 @@ class _PeopleListPageState extends State<PeopleListPage> {
     );
   }
 }
+
+
+
+
+
+
+
+// StreamBuilder(
+//             stream: _controllerPessoas.findAll(),
+//             builder: (context, AsyncSnapshot<Stream<List<PersonModel>>> snapshot) {
+//               if (snapshot.hasData) {
+//                 return StreamBuilder(
+//                   stream: snapshot.data,
+//                   builder: (context, AsyncSnapshot<List<PersonModel>> snapshot) {
+//                     if (snapshot.hasData) {
+//                       return SizedBox(
+//                         height:400,
+                        
+//                         child: ListView.builder(
+//                           itemCount: snapshot.data!.length,
+//                           itemBuilder: (context, index) {
+//                             final people = snapshot.data![index];
+//                             return ListTile(
+//                               title: Text(people.name),
+//                               subtitle: Text(people.email),
+//                               trailing: Text(people.age.toString()),
+//                             );
+//                           },
+//                         ),
+//                       );
+//                     } else {
+//                       return const Center(
+//                         child: CircularProgressIndicator(),
+//                       );
+//                     }
+//                   },
+//                 );
+//               } else {
+//                 return const Center(
+//                   child: CircularProgressIndicator(),
+//                 );
+//               }
+//             },
+//           ),
