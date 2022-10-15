@@ -6,14 +6,7 @@ class ControllerPessoas {
 
   findAll() async {
     final pessoas = await _pessoasRepository.readFirebase();
-
     return pessoas;
   }
 }
 
-main() {
-  final _controllerPessoas = ControllerPessoas();
-  for (var element in _controllerPessoas.findAll()) {
-    print(element);
-  }
-}

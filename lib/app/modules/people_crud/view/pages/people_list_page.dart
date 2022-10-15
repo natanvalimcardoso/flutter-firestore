@@ -19,15 +19,26 @@ final TextEditingController _nameController = TextEditingController();
 final TextEditingController _emailController = TextEditingController();
 final TextEditingController _ageController = TextEditingController();
 
-Future createName({required String name, required String email, required int age}) async {
+Future createPeople({required String name, required String email, required int age}) async {
   final sendPeopleFirebase = FirebaseFirestore.instance.collection('people').doc();
   final people = PersonModel(id: sendPeopleFirebase.id, name: name, email: email, age: age);
   final json = people.toMap();
   await sendPeopleFirebase.set(json);
 }
 
-    CollectionReference people = FirebaseFirestore.instance.collection('people');
+Future deletePeople({required String id}) async {
+  final deletePeopleFirebase = FirebaseFirestore.instance.collection('people').doc(id);
+  await deletePeopleFirebase.delete();
+}
 
+final Stream<QuerySnapshot> _peopleStream =
+    FirebaseFirestore.instance.collection('people').snapshots();
+
+cleanTextFields() {
+  _nameController.clear();
+  _emailController.clear();
+  _ageController.clear();
+}
 
 class _PeopleListPageState extends State<PeopleListPage> {
   @override
@@ -36,25 +47,115 @@ class _PeopleListPageState extends State<PeopleListPage> {
       body: Column(
         children: [
           const HeaderWidget(),
-          StreamBuilder<QuerySnapshot>(
-            stream: people.snapshots(),
-            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          StreamBuilder(
+            stream: _peopleStream,
+            builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Text('Something went wrong');
+                return const Text('Something went wrong');
               }
 
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Text("Loading");
+                return const Text("Loading");
               }
 
               return SizedBox(
                 height: 500,
                 child: ListView(
                   children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                    Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-                    return ListTile(
-                      title: Text(data['name']),
-                      subtitle: Text(data['email']),
+                    var data = document.data()! as Map<String, dynamic>;
+                    return Card(
+                      child: Container(
+                        height: 80,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Row(
+                              children: const [
+                                Padding(
+                                  padding: EdgeInsets.only(left: 20),
+                                  child: Text(
+                                    'Nome',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 105),
+                                  child: Text(
+                                    'Email',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 70),
+                                  child: Text(
+                                    'Idade',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 40),
+                                  child: Text(
+                                    'Delete',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.only(left: 10),
+                                  alignment: Alignment.center,
+                                  width: 85,
+                                  child: Text(
+                                    data['name'],
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(left: 10),
+                                  width: 160,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    data['email'],
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(left: 5),
+                                  width: 30,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    data['age'].toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 40),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      deletePeople(id: data['id']);
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     );
                   }).toList(),
                 ),
@@ -75,12 +176,13 @@ class _PeopleListPageState extends State<PeopleListPage> {
                 ),
                 child: ModalContainerWidget(
                   onTap: () {
-                    createName(
+                    createPeople(
                       name: _nameController.text,
                       email: _emailController.text,
                       age: int.parse(_ageController.text),
                     );
                     Modular.to.pop();
+                    cleanTextFields();
                   },
                   nameController: _nameController,
                   emailController: _emailController,
@@ -95,47 +197,3 @@ class _PeopleListPageState extends State<PeopleListPage> {
     );
   }
 }
-
-
-
-
-
-
-
-// StreamBuilder(
-//             stream: _controllerPessoas.findAll(),
-//             builder: (context, AsyncSnapshot<Stream<List<PersonModel>>> snapshot) {
-//               if (snapshot.hasData) {
-//                 return StreamBuilder(
-//                   stream: snapshot.data,
-//                   builder: (context, AsyncSnapshot<List<PersonModel>> snapshot) {
-//                     if (snapshot.hasData) {
-//                       return SizedBox(
-//                         height:400,
-                        
-//                         child: ListView.builder(
-//                           itemCount: snapshot.data!.length,
-//                           itemBuilder: (context, index) {
-//                             final people = snapshot.data![index];
-//                             return ListTile(
-//                               title: Text(people.name),
-//                               subtitle: Text(people.email),
-//                               trailing: Text(people.age.toString()),
-//                             );
-//                           },
-//                         ),
-//                       );
-//                     } else {
-//                       return const Center(
-//                         child: CircularProgressIndicator(),
-//                       );
-//                     }
-//                   },
-//                 );
-//               } else {
-//                 return const Center(
-//                   child: CircularProgressIndicator(),
-//                 );
-//               }
-//             },
-//           ),
