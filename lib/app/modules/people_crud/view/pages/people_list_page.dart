@@ -67,48 +67,50 @@ class _PeopleListPageState extends State<PeopleListPage> {
                       child: Container(
                         height: 80,
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Row(
-                              children: const [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 20),
-                                  child: Text(
-                                    'Nome',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                            Container(
+                              height: 25,
+                              color: Color.fromARGB(255, 240, 238, 238),
+                              child: Row(
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 20),
+                                    child: Text(
+                                      'Nome',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 105),
-                                  child: Text(
-                                    'Email',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 105),
+                                    child: Text(
+                                      'Email',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 70),
-                                  child: Text(
-                                    'Idade',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 70),
+                                    child: Text(
+                                      'Idade',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 40),
-                                  child: Text(
-                                    'Delete',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 40),
+                                    child: Text(
+                                      'Delete',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                             Row(
                               children: [
@@ -165,6 +167,7 @@ class _PeopleListPageState extends State<PeopleListPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
         onPressed: () {
           showMaterialModalBottomSheet(
             context: context,
