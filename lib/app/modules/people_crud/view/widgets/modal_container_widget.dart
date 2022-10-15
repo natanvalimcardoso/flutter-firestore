@@ -5,7 +5,7 @@ class ModalContainerWidget extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController emailController;
   final TextEditingController ageController;
-  ModalContainerWidget({
+  const ModalContainerWidget({
     Key? key,
     required this.onTap,
     required this.nameController,
@@ -54,12 +54,12 @@ class ModalContainerWidget extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             top: 10,
           ),
-          child: Container(
+          child: SizedBox(
             width: 200,
-            child: ElevatedButton(child: const Text('Enviar'), onPressed: onTap),
+            child: ElevatedButton(onPressed: onTap, child: const Text('Enviar')),
           ),
         )
       ],

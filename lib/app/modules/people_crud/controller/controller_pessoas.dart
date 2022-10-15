@@ -1,4 +1,3 @@
-import 'package:flutter_firestore/app/modules/people_crud/model/pessoa_model.dart';
 import 'package:flutter_firestore/app/modules/people_crud/repositories/pessoas_repositories.dart';
 
 class ControllerPessoas {
