@@ -28,12 +28,20 @@ Future createPeople({required String name, required String email, required int a
   await sendPeopleFirebase.set(json);
 }
 
+Future updatePeople({required String id, required String name, required String email, required int age}) async {
+  final sendPeopleFirebase = FirebaseFirestore.instance.collection('people').doc(id);
+  final people = PersonModel(id: id, name: name, email: email, age: age);
+  final json = people.toMap();
+  await sendPeopleFirebase.update(json);
+}
+
 Future deletePeople({required String id}) async {
   final deletePeopleFirebase = FirebaseFirestore.instance.collection('people').doc(id);
   await deletePeopleFirebase.delete();
 }
 
-final Stream<QuerySnapshot> _peopleStream = FirebaseFirestore.instance.collection('people').snapshots();
+final Stream<QuerySnapshot> _peopleStream =
+    FirebaseFirestore.instance.collection('people').snapshots();
 
 //? ----------------------------|| CRUD  ||-------------------------------- //?
 
@@ -65,21 +73,50 @@ class _PeopleListPageState extends State<PeopleListPage> {
                     child: CircularProgressIndicator(),
                   );
                 }
-                
                 return SizedBox(
                   height: 500,
-                  child: ListView( //! transformar em ListView.builder
-                    children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                      var data = document.data()! as Map<String, dynamic>;
+                  child: ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      var data = snapshot.data!.docs[index].data()! as Map<String, dynamic>;
                       var people = PersonModel.fromMap(data);
                       return CardFirebaseWidget(
-                          name: people.name,
-                          email: people.email,
-                          age: people.age,
-                          deletePeopleOnTap: () {
-                            deletePeople(id: data['id']);
-                          });
-                    }).toList(),
+                        name: people.name,
+                        email: people.email,
+                        age: people.age,
+                        deletePeopleOnTap: () {
+                          deletePeople(id: data['id']);
+                        },
+                        editPeopleOnTap: () {
+                          showMaterialModalBottomSheet(
+                            context: context,
+                            builder: (context) => SizedBox(
+                              height: 620,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 50,
+                                ),
+                                child: ModalContainerWidget(
+                                  onTap: () {
+                                    updatePeople(
+                                      name: _nameController.text,
+                                      email: _emailController.text,
+                                      age: int.parse(_ageController.text),
+                                      id: data['id'],
+                                    );
+                                    Modular.to.pop();
+                                    cleanTextFields();
+                                  },
+                                  nameController: _nameController,
+                                  emailController: _emailController,
+                                  ageController: _ageController,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                 );
               },
