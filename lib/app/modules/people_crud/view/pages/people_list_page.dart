@@ -28,6 +28,7 @@ Future createPeople({required String name, required String email, required int a
   await sendPeopleFirebase.set(json);
 }
 
+
 Future deletePeople({required String id}) async {
   final deletePeopleFirebase = FirebaseFirestore.instance.collection('people').doc(id);
   await deletePeopleFirebase.delete();
