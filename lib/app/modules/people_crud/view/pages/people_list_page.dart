@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import '../../controller/controller_pessoas.dart';
 import '../../model/pessoa_model.dart';
 import '../widgets/card_firebase_widget.dart';
 import '../widgets/header_widget.dart';
@@ -28,7 +29,6 @@ Future createPeople({required String name, required String email, required int a
   await sendPeopleFirebase.set(json);
 }
 
-
 Future deletePeople({required String id}) async {
   final deletePeopleFirebase = FirebaseFirestore.instance.collection('people').doc(id);
   await deletePeopleFirebase.delete();
@@ -52,6 +52,8 @@ cleanTextFields() {
   _emailController.clear();
   _ageController.clear();
 }
+
+final _controllerPeople = ControllerPessoas();
 
 class _PeopleListPageState extends State<PeopleListPage> {
   @override
@@ -78,9 +80,10 @@ class _PeopleListPageState extends State<PeopleListPage> {
 
                 return SizedBox(
                   height: 500,
-                  child: ListView(
-                    children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                      var data = document.data()! as Map<String, dynamic>;
+                  child: ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      var data = snapshot.data!.docs[index].data()! as Map<String, dynamic>;
                       var people = PersonModel.fromMap(data);
                       return CardFirebaseWidget(
                         name: people.name,
@@ -118,7 +121,7 @@ class _PeopleListPageState extends State<PeopleListPage> {
                           );
                         },
                       );
-                    }).toList(),
+                    },
                   ),
                 );
               },

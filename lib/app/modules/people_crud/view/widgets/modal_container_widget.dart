@@ -20,6 +20,7 @@ class ModalContainerWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextFormField(
+            textInputAction: TextInputAction.next,
             controller: nameController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
@@ -32,6 +33,7 @@ class ModalContainerWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: TextFormField(
+            textInputAction: TextInputAction.next,
             controller: emailController,
             decoration: InputDecoration(
               border: OutlineInputBorder(
