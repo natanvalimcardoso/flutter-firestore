@@ -22,25 +22,24 @@ final TextEditingController _ageController = TextEditingController();
 
 //? ----------------------------|| CRUD  ||-------------------------------- //?
 
-Future createPeople({required String name, required String email, required int age}) async {
-  final sendPeopleFirebase = FirebaseFirestore.instance.collection('people').doc();
-  final people = PersonModel(id: sendPeopleFirebase.id, name: name, email: email, age: age);
-  final json = people.toMap();
-  await sendPeopleFirebase.set(json);
-}
+// Future createPeople({required String name, required String email, required int age}) async {
+//   final sendPeopleFirebase = FirebaseFirestore.instance.collection('people').doc();
+//   final people = PersonModel(id: sendPeopleFirebase.id, name: name, email: email, age: age);
+//   final json = people.toMap();
+//   await sendPeopleFirebase.set(json);
+// }
 
-Future deletePeople({required String id}) async {
-  final deletePeopleFirebase = FirebaseFirestore.instance.collection('people').doc(id);
-  await deletePeopleFirebase.delete();
-}
+// Future deletePeople({required String id}) async {
+//   final deletePeopleFirebase = FirebaseFirestore.instance.collection('people').doc(id);
+//   await deletePeopleFirebase.delete();
+// }
 
-Future updatePeople(
-    {required String id, required String name, required String email, required int age}) async {
-  final sendPeopleFirebase = FirebaseFirestore.instance.collection('people').doc(id);
-  final people = PersonModel(id: id, name: name, email: email, age: age);
-  final json = people.toMap();
-  await sendPeopleFirebase.update(json);
-}
+// Future updatePeople({required String id, required String name, required String email, required int age}) async {
+//   final sendPeopleFirebase = FirebaseFirestore.instance.collection('people').doc(id);
+//   final people = PersonModel(id: id, name: name, email: email, age: age);
+//   final json = people.toMap();
+//   await sendPeopleFirebase.update(json);
+// }
 
 final Stream<QuerySnapshot> _peopleStream =
     FirebaseFirestore.instance.collection('people').snapshots();
@@ -90,7 +89,7 @@ class _PeopleListPageState extends State<PeopleListPage> {
                         email: people.email,
                         age: people.age,
                         deletePeopleOnTap: () {
-                          deletePeople(id: data['id']);
+                          _controllerPeople.deletePeople(id: people.id);
                         },
                         updatePeopleOnTap: () {
                           showMaterialModalBottomSheet(
@@ -103,7 +102,7 @@ class _PeopleListPageState extends State<PeopleListPage> {
                                 ),
                                 child: ModalContainerWidget(
                                   onTap: () {
-                                    updatePeople(
+                                    _controllerPeople.updatePeople(
                                       id: data['id'],
                                       name: _nameController.text,
                                       email: _emailController.text,
@@ -142,7 +141,7 @@ class _PeopleListPageState extends State<PeopleListPage> {
                 ),
                 child: ModalContainerWidget(
                   onTap: () {
-                    createPeople(
+                    _controllerPeople.createPeople(
                       name: _nameController.text,
                       email: _emailController.text,
                       age: int.parse(_ageController.text),

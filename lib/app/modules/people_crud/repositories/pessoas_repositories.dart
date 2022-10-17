@@ -4,15 +4,28 @@ import '../model/pessoa_model.dart';
 
 class PessoasRepositories {
   Future<PersonModel> findAllPeople() async {
-    Stream<QuerySnapshot> _peopleStream = FirebaseFirestore.instance.collection('people').snapshots();
+    Stream<QuerySnapshot> _peopleStream =
+        FirebaseFirestore.instance.collection('people').snapshots();
     return _peopleStream as Future<PersonModel>;
   }
+
+  Future createPeople({required String name, required String email, required int age}) async {
+    final sendPeopleFirebase = FirebaseFirestore.instance.collection('people').doc();
+    final people = PersonModel(id: sendPeopleFirebase.id, name: name, email: email, age: age);
+    final json = people.toMap();
+    await sendPeopleFirebase.set(json);
+  }
+
+  Future deletePeople({required String id}) async {
+    final deletePeopleFirebase = FirebaseFirestore.instance.collection('people').doc(id);
+    await deletePeopleFirebase.delete();
+  }
+
+  Future updatePeople(
+      {required String id, required String name, required String email, required int age}) async {
+    final sendPeopleFirebase = FirebaseFirestore.instance.collection('people').doc(id);
+    final people = PersonModel(id: id, name: name, email: email, age: age);
+    final json = people.toMap();
+    await sendPeopleFirebase.update(json);
+  }
 }
-// Future<ExtratoModel?> findContaUnica(String fidelidade, EmpresaModel empresa) async {
-//     FirebaseFirestore _firebase = FirebaseFirestore.instance;
-//     final QuerySnapshot<Map<String, dynamic>> _resposta = await _firebase.collection('conta').where('empresa.cnpj', isEqualTo: empresa.cnpj).where('id_conta', isEqualTo: fidelidade).get();
-//     if (_resposta.docs.isNotEmpty) {
-//       return ExtratoModel.fromJson(_resposta.docs.first.data());
-//     }
-//     return null;
-//   }
