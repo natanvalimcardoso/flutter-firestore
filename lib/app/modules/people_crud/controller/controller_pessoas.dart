@@ -3,10 +3,6 @@ import 'package:flutter_firestore/app/modules/people_crud/repositories/pessoas_r
 class ControllerPessoas {
   final _pessoasRepository = PessoasRepositories();
 
-  findAllPeople() async {
-    return await _pessoasRepository.findAllPeople();
-  }
-
   createPeople({required String name, required String email, required int age}) async {
     return await _pessoasRepository.createPeople(name: name, email: email, age: age);
   }

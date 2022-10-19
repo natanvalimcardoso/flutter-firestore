@@ -20,31 +20,8 @@ final TextEditingController _nameController = TextEditingController();
 final TextEditingController _emailController = TextEditingController();
 final TextEditingController _ageController = TextEditingController();
 
-//? ----------------------------|| CRUD  ||-------------------------------- //?
-
-// Future createPeople({required String name, required String email, required int age}) async {
-//   final sendPeopleFirebase = FirebaseFirestore.instance.collection('people').doc();
-//   final people = PersonModel(id: sendPeopleFirebase.id, name: name, email: email, age: age);
-//   final json = people.toMap();
-//   await sendPeopleFirebase.set(json);
-// }
-
-// Future deletePeople({required String id}) async {
-//   final deletePeopleFirebase = FirebaseFirestore.instance.collection('people').doc(id);
-//   await deletePeopleFirebase.delete();
-// }
-
-// Future updatePeople({required String id, required String name, required String email, required int age}) async {
-//   final sendPeopleFirebase = FirebaseFirestore.instance.collection('people').doc(id);
-//   final people = PersonModel(id: id, name: name, email: email, age: age);
-//   final json = people.toMap();
-//   await sendPeopleFirebase.update(json);
-// }
-
 final Stream<QuerySnapshot> _peopleStream =
     FirebaseFirestore.instance.collection('people').snapshots();
-
-//? ----------------------------|| CRUD  ||-------------------------------- //?
 
 cleanTextFields() {
   _nameController.clear();
@@ -53,6 +30,7 @@ cleanTextFields() {
 }
 
 final _controllerPeople = ControllerPessoas();
+final _formKey = GlobalKey<FormState>();
 
 class _PeopleListPageState extends State<PeopleListPage> {
   @override
@@ -102,18 +80,25 @@ class _PeopleListPageState extends State<PeopleListPage> {
                                 ),
                                 child: ModalContainerWidget(
                                   onTap: () {
-                                    _controllerPeople.updatePeople(
-                                      id: data['id'],
-                                      name: _nameController.text,
-                                      email: _emailController.text,
-                                      age: int.parse(_ageController.text),
-                                    );
-                                    Modular.to.pop();
-                                    cleanTextFields();
+                                    if (_formKey.currentState!.validate() &&
+                                        _nameController.text.isNotEmpty &&
+                                        _emailController.text.isNotEmpty &&
+                                        _ageController.text.isNotEmpty) {
+                                      _controllerPeople.updatePeople(
+                                        id: data['id'],
+                                        name: _nameController.text,
+                                        email: _emailController.text,
+                                        age: int.parse(_ageController.text),
+                                      );
+                                      Modular.to.pop();
+                                      cleanTextFields();
+                                    }
                                   },
                                   nameController: _nameController,
                                   emailController: _emailController,
                                   ageController: _ageController,
+                                  title: 'Atualizar Pessoa',
+                                  formKey: _formKey,
                                 ),
                               ),
                             ),
@@ -140,18 +125,25 @@ class _PeopleListPageState extends State<PeopleListPage> {
                   top: 50,
                 ),
                 child: ModalContainerWidget(
+                  formKey: _formKey,
                   onTap: () {
-                    _controllerPeople.createPeople(
-                      name: _nameController.text,
-                      email: _emailController.text,
-                      age: int.parse(_ageController.text),
-                    );
-                    Modular.to.pop();
-                    cleanTextFields();
+                    if (_formKey.currentState!.validate() &&
+                        _nameController.text.isNotEmpty &&
+                        _emailController.text.isNotEmpty &&
+                        _ageController.text.isNotEmpty) {
+                      _controllerPeople.createPeople(
+                        name: _nameController.text,
+                        email: _emailController.text,
+                        age: int.parse(_ageController.text),
+                      );
+                      Modular.to.pop();
+                      cleanTextFields();
+                    }
                   },
                   nameController: _nameController,
                   emailController: _emailController,
                   ageController: _ageController,
+                  title: 'Adicionar Pessoa',
                 ),
               ),
             ),

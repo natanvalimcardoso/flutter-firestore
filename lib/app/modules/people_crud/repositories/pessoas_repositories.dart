@@ -3,11 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/pessoa_model.dart';
 
 class PessoasRepositories {
-  Future<PersonModel> findAllPeople() async {
-    Stream<QuerySnapshot> _peopleStream =
-        FirebaseFirestore.instance.collection('people').snapshots();
-    return _peopleStream as Future<PersonModel>;
-  }
 
   Future createPeople({required String name, required String email, required int age}) async {
     final sendPeopleFirebase = FirebaseFirestore.instance.collection('people').doc();
